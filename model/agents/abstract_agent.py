@@ -28,7 +28,7 @@ class Agent(ABC):
         while not self.game_state.is_game_over():
             cur_dice = self.game_state.roll_dice()
             self.choose_die(self.game_state, cur_dice)
-        print("Game over, final score: " + self.game_state.get_utility())
+        print(f"Game over, final score: {self.game_state.get_utility()}")
         return True
 
     # Runs the agent, printing an action each time one is taken
@@ -42,6 +42,6 @@ class Agent(ABC):
                 print(f"Taking {die} {cur_dice[die]}")
             else:
                 print("Skipping die")
-        print("Game over, final score: " + self.game_state.get_utility())
+        print(f"Game over, final score: {self.game_state.get_utility()}")
         return True
 
