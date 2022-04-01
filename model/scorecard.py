@@ -1,5 +1,5 @@
 """ Module Representing the Score Card"""
-from typing import Tuple, Optional
+from typing import Tuple, Optional, List
 
 from model.colors.green_state import GreenState
 from model.colors.orange_state import OrangeState
@@ -44,5 +44,17 @@ class ScoreCard:
         """
         if new_die:
             self._color_mapping[new_die[0]].add_die(new_die[1])
+
+        return self._green_state.get_utility() + self._orange_state.get_utility() + self._purple_state.get_utility()
+
+    def get_multi_utility(self, new_die_list: List[Tuple[Color, int]]) -> int:
+        """
+        Get the expected utility of taking each of the dice in order they are given
+        :param new_die_list: The list of dice to take in the order they should be taken
+        :return: The new utility of the card
+        """
+
+        for die in new_die_list:
+            self._color_mapping[die[0]].add_die(die[1])
 
         return self._green_state.get_utility() + self._orange_state.get_utility() + self._purple_state.get_utility()
