@@ -1,5 +1,6 @@
 """ Abstract module representing the state of a color of the card """
 from abc import ABC, abstractmethod
+import copy
 from typing import Optional
 
 
@@ -30,3 +31,10 @@ class ColorState(ABC):
         :param new_die: The optional new die result to include in the utility calculation
         :return: The utility of the state
         """
+
+    def copy_state(self):
+        """
+        Makes a deep copy of this color state
+        :return: A ne copy of this color state
+        """
+        return copy.deepcopy(self)
