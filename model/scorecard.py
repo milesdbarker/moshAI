@@ -50,3 +50,10 @@ class ScoreCard:
                 color_map_copy[die[0]].add_die(die[1])
 
         return sum(map(lambda state: state.get_utility(), color_map_copy.values()))
+
+    def __copy__(self):
+        color_map_copy: Dict[Color, ColorState] = {color: state.copy_state() for color, state in
+                                                   self._color_mapping.items()}
+        new_card = ScoreCard()
+        new_card._color_mapping = color_map_copy
+        return new_card

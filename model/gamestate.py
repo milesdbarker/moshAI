@@ -13,7 +13,7 @@ class GameState:
         """ Initialize a new GameState """
 
         self._turn_number = 1
-        self._roll_number = 1
+        self.roll_number = 1
         self._roll = None
         self.card = ScoreCard()
         self._available_dice = get_all_colors()
@@ -43,11 +43,11 @@ class GameState:
             return False
 
         self._roll = None
-        if self._roll_number < 3:
-            self._roll_number += 1
+        if self.roll_number < 3:
+            self.roll_number += 1
             self._available_dice.remove(die)
         else:
-            self._roll_number = 1
+            self.roll_number = 1
             self._turn_number += 1
             self._available_dice = get_all_colors()
         return True
@@ -59,10 +59,10 @@ class GameState:
         no possible moves.
         """
         self._roll = None
-        if self._roll_number < 3:
-            self._roll_number += 1
+        if self.roll_number < 3:
+            self.roll_number += 1
         else:
-            self._roll_number = 1
+            self.roll_number = 1
             self._turn_number += 1
             self._available_dice = get_all_colors()
 
