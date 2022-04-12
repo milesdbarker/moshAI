@@ -33,8 +33,9 @@ class GameState:
                 self.white_die_value = value
             elif color == Color.BLUE:
                 self.blue_die_value = value
+        if Color.BLUE in roll:
+            roll[Color.BLUE] += self.white_die_value
         self._roll = roll
-        roll[Color.BLUE] += self.white_die_value
         return roll
 
     def choose_die(self, die: Color) -> bool:

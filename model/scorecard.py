@@ -25,6 +25,13 @@ class ScoreCard:
             Color.BLUE: self._blue_state
         }
 
+    def can_add_die(self, die: Color, result: int) -> bool:
+        state = self._color_mapping[die]
+        if state.is_next_die_valid(result):
+            return True
+        else:
+            return False
+
     def add_die(self, die: Color, result: int) -> bool:
         """
         Try to add the die result to the score card (returns false if the die cannot be added).
