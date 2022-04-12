@@ -1,6 +1,7 @@
 """ Module Representing the Score Card"""
 from typing import Tuple, Optional, List, Dict
 
+from model.colors.blue_state import BlueState
 from model.colors.color_state import ColorState
 from model.colors.green_state import GreenState
 from model.colors.orange_state import OrangeState
@@ -16,10 +17,12 @@ class ScoreCard:
         self._green_state = GreenState()
         self._orange_state = OrangeState()
         self._purple_state = PurpleState()
+        self._blue_state = BlueState()
         self._color_mapping = {
             Color.GREEN: self._green_state,
             Color.ORANGE: self._orange_state,
-            Color.PURPLE: self._purple_state
+            Color.PURPLE: self._purple_state,
+            Color.BLUE: self._blue_state
         }
 
     def add_die(self, die: Color, result: int) -> bool:

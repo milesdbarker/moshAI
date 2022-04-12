@@ -7,6 +7,8 @@ class Color(Enum):
     GREEN = "green"
     ORANGE = "orange"
     PURPLE = "purple"
+    WHITE = "white"
+    BLUE = "blue"
 
 
 def get_all_colors() -> List[Color]:
@@ -14,4 +16,4 @@ def get_all_colors() -> List[Color]:
     Get a list of all the colors.
     :return: The list of colors
     """
-    return [Color.GREEN, Color.ORANGE, Color.PURPLE]
+    return [Color.GREEN, Color.ORANGE, Color.PURPLE, Color.WHITE, Color.BLUE]

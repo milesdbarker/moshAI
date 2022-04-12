@@ -17,6 +17,8 @@ class GameState:
         self._roll = None
         self.card = ScoreCard()
         self._available_dice = get_all_colors()
+        self.white_die_value = -1
+        self.blue_die_value = -1
 
     def roll_dice(self) -> Dict[Color, int]:
         """
@@ -25,19 +27,26 @@ class GameState:
         """
         roll = dict()
         for color in self._available_dice:
-            roll.update({color: random.randint(1, 6)})
+            value = random.randint(1, 6)
+            roll.update({color: value})
+            if color == Color.WHITE:
+                self.white_die_value = value
+            elif color == Color.BLUE:
+                self.blue_die_value = value
         self._roll = roll
+        roll[Color.BLUE] += self.white_die_value
         return roll
 
     def choose_die(self, die: Color) -> bool:
         """
         Choose the dice to take for the roll. If the choice is valid, this returns true and applies the choice (resetting the roll).
         Otherwise, it returns false and the previous roll is not reset (another choice must be made).
+        For choosing the white die as a certain color, call the choose_white_die() method instead.
         PREREQUISITE: Dice must have been rolled first (Roll dice after each successful call of this method).
         :param die: The dice color to take
         :return: Whether or not the choice was valid (successful)
         """
-        assert self._roll is not None
+        assert self._roll is not None and die != Color.WHITE
 
         if die not in self._roll or not self.card.add_die(die, self._roll[die]):
             return False
@@ -46,6 +55,37 @@ class GameState:
         if self.roll_number < 3:
             self.roll_number += 1
             self._available_dice.remove(die)
+        else:
+            self.roll_number = 1
+            self._turn_number += 1
+            self._available_dice = get_all_colors()
+        return True
+
+    def choose_white_die(self, die: Color) -> bool:
+        """
+        Choose the white die for the roll, providing the color to take it as.
+        If the choice is valid, this returns true and applies the choice (resetting the roll).
+        Otherwise, it returns false and the previous roll is not reset (another choice must be made).
+        PREREQUISITE: Dice must have been rolled first (Roll dice after each successful call of this method).
+        :param die: The dice color to take
+        :return: Whether or not the choice was valid (successful)
+        """
+        assert self._roll is not None and die != Color.WHITE
+
+        if Color.WHITE not in self._roll:
+            return False
+
+        roll_value = self._roll[Color.WHITE]
+        if die == Color.BLUE:
+            roll_value += self.blue_die_value
+
+        if not self.card.add_die(die, roll_value):
+            return False
+
+        self._roll = None
+        if self.roll_number < 3:
+            self.roll_number += 1
+            self._available_dice.remove(Color.WHITE)
         else:
             self.roll_number = 1
             self._turn_number += 1
