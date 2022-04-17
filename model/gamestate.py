@@ -1,6 +1,6 @@
 """ Module Representing the Game State"""
 import random
-from typing import Dict
+from typing import Dict, List
 
 from model.dice_colors import Color, get_all_colors
 from model.scorecard import ScoreCard
@@ -14,9 +14,9 @@ class GameState:
 
         self._turn_number = 1
         self.roll_number = 1
-        self._roll = None
+        self._roll: Dict[Color, int] = None
         self.card = ScoreCard()
-        self._available_dice = get_all_colors()
+        self._available_dice: List[Color] = get_all_colors()
         self.white_die_value = -1
         self.blue_die_value = -1
 
@@ -52,14 +52,15 @@ class GameState:
         if die not in self._roll or not self.card.add_die(die, self._roll[die]):
             return False
 
-        self._roll = None
         if self.roll_number < 3:
             self.roll_number += 1
             self._available_dice.remove(die)
+            self._available_dice = list(filter(lambda color: self._roll[color] >= self._roll[die], self._available_dice))
         else:
             self.roll_number = 1
             self._turn_number += 1
             self._available_dice = get_all_colors()
+        self._roll = None
         return True
 
     def choose_white_die(self, die: Color) -> bool:
@@ -83,14 +84,15 @@ class GameState:
         if not self.card.add_die(die, roll_value):
             return False
 
-        self._roll = None
         if self.roll_number < 3:
             self.roll_number += 1
             self._available_dice.remove(Color.WHITE)
+            self._available_dice = list(filter(lambda color: self._roll[color] >= self._roll[Color.WHITE], self._available_dice))
         else:
             self.roll_number = 1
             self._turn_number += 1
             self._available_dice = get_all_colors()
+        self._roll = None
         return True
 
     def skip_choice(self):

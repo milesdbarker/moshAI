@@ -3,7 +3,7 @@ from typing import Dict
 
 from abc import ABC, abstractmethod
 from model.gamestate import GameState
-from model.dice_colors import Color
+from model.dice_colors import Color, get_all_colors
 
 
 class Agent(ABC):
@@ -11,6 +11,8 @@ class Agent(ABC):
 
     def __init__(self):
         self.game_state = GameState()
+        # Keep tabs of how many times each color was chosen for this game
+        self.colors_chosen = {color: 0 for color in get_all_colors()}
 
     @abstractmethod
     def choose_die(self, dice: Dict[Color, int]) -> Color:
@@ -18,7 +20,7 @@ class Agent(ABC):
         Chooses and takes a die in the game state
         based on the algorithm implemented by this agent
         :param dice: The possible dice to choose from
-        :result: The color die that was chosen (can be none)
+        :return: The color die that was chosen (can be none)
         """
 
     # Runs the agent, printing the final score
@@ -42,4 +44,5 @@ class Agent(ABC):
             else:
                 print("Skipping die")
         print(f"Game over, final score: {self.game_state.get_utility()}")
+        print(f"Colors chosen this game: {self.colors_chosen}")
         return True

@@ -40,6 +40,7 @@ class ExpectimaxAgent(Agent):
                 die_averages[die_color] = card_copy.get_utility()
             else:
                 dice_expander = dice_list.copy()
+                dice_expander = list(filter(lambda color: dice[color] >= dice[die_color], dice_expander))
                 dice_expander.remove(die_color)
                 # dice_expanded is a List[Tuple[Tuple[Color, int]]]. It is a list of ((Color, int)...) that contains
                 # all the possible next rolls. Each inner Tuple is a dice roll while each outer Tuple is one possibility
