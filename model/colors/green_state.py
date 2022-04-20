@@ -33,3 +33,6 @@ class GreenState(ColorState):
             return self.scores[len(self.greens) + 1]
         else:
             return self.scores[len(self.greens)]
+
+    def get_score(self) -> int:
+        return self.scores[len(self.greens)]

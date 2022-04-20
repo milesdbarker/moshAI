@@ -43,6 +43,22 @@ class Agent(ABC):
                 print(f"Taking {die} {cur_dice[die]}")
             else:
                 print("Skipping die")
-        print(f"Game over, final score: {self.game_state.get_utility()}")
+        print(f"Game over, final score: {self.game_state.get_score()}")
         print(f"Colors chosen this game: {self.colors_chosen}")
         return True
+
+    def compute_best_white_die_choice(self, value) -> Color:
+        """
+        Compute the best choice for the white die out of all possible colors.
+        :param value: The value of the white die
+        :return: The best color
+        """
+        utilities: Dict[Color, int] = {}
+        for color in get_all_colors():
+            if color == Color.WHITE:
+                continue
+            else:
+                added_utility = self.game_state.card.get_utility([(color, value)]) - self.game_state.card.get_utility()
+                utilities[color] = added_utility
+        best_color = max(utilities.items(), key=lambda d: d[1])
+        return best_color

@@ -32,6 +32,13 @@ class ColorState(ABC):
         :return: The utility of the state
         """
 
+    @abstractmethod
+    def get_score(self) -> int:
+        """
+        Get the score of the state.
+        :return: The score of the state
+        """
+
     def copy_state(self):
         """
         Makes a deep copy of this color state

@@ -29,3 +29,6 @@ class BlueState(ColorState):
             return self.scores[len(self.blues) + 1]
         else:
             return self.scores[len(self.blues)]
+
+    def get_score(self) -> int:
+        return self.scores[len(self.blues)]

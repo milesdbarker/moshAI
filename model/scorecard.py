@@ -61,6 +61,15 @@ class ScoreCard:
 
         return sum(map(lambda state: state.get_utility(), color_map_copy.values()))
 
+    def get_score(self) -> int:
+        """
+        Get the score of the score card.
+        :return: The score of the card
+        """
+        color_map_copy: Dict[Color, ColorState] = {color: state.copy_state() for color, state in self._color_mapping.items()}
+
+        return sum(map(lambda state: state.get_score(), color_map_copy.values()))
+
     def __copy__(self):
         color_map_copy: Dict[Color, ColorState] = {color: state.copy_state() for color, state in
                                                    self._color_mapping.items()}

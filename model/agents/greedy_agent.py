@@ -52,19 +52,3 @@ class GreedyAgent(Agent):
             return self.game_state.choose_white_die(self.compute_best_white_die_choice(value)[0])
         else:
             return self.game_state.choose_die(die)
-
-    def compute_best_white_die_choice(self, value)-> Color:
-        """
-        Compute the best choice for the white die out of all possible colors.
-        :param value: The value of the white die
-        :return: The best color
-        """
-        utilities: Dict[Color, int] = {}
-        for color in get_all_colors():
-            if color == Color.WHITE:
-                continue
-            else:
-                added_utility = self.game_state.card.get_utility([(color, value)]) - self.game_state.card.get_utility()
-                utilities[color] = added_utility
-        best_color = max(utilities.items(), key=lambda d: d[1])
-        return best_color

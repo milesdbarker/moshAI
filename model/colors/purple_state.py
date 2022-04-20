@@ -30,3 +30,6 @@ class PurpleState(ColorState):
             return sum(self.purples) + new_die
         else:
             return sum(self.purples)
+
+    def get_score(self) -> int:
+        return sum(self.purples)

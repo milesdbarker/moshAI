@@ -25,15 +25,11 @@ class ExpectimaxAgent(Agent):
         dice_list = list(dice.keys())
         die_averages: {Color: int} = {}
 
-        # TODO: Remove this and add white to the expectimax
-        if Color.WHITE in dice_list:
-            dice_list.remove(Color.WHITE)
-
         # Get the average utility of taking this die and the next possible role(s)
         for die_color in dice_list:
             card_copy = card.__copy__()
             # Skip invalid dice to save computation
-            if not card_copy.add_die(die_color, dice[die_color]):
+            if not self.add_die_wrapper(die_color, dice[die_color], card_copy):
                 continue
             # if this is the last roll, we don't have to choose a next die
             if rolls_left == 0:
@@ -60,7 +56,7 @@ class ExpectimaxAgent(Agent):
             if len(die_averages) == 0:
                 return None, card.get_utility()
             max_avg = max(die_averages, key=die_averages.get)
-            if card.add_die(max_avg, dice[max_avg]):
+            if self.add_die_wrapper(max_avg, dice[max_avg], card):
                 return max_avg, die_averages[max_avg]
             else:
                 die_averages.pop(max_avg)
@@ -68,10 +64,24 @@ class ExpectimaxAgent(Agent):
     def choose_die(self, dice: Dict[Color, int]) -> Color:
         die = self.choose_die_helper(dice, (3 - self.game_state.roll_number), self.game_state.card.__copy__())[0]
         if die:
-            self.game_state.choose_die(die)
+            self.colors_chosen[die] += 1
+            self.game_state.choose_die(die) if die != Color.WHITE else self.game_state.choose_white_die(self.compute_best_white_die_choice(dice[die])[0])
         else:
             self.game_state.skip_choice()
         return die
+
+    def add_die_wrapper(self, die: Color, value: int, scorecard: ScoreCard) -> bool:
+        """
+        Wrapper function for attempting to add either the white or a non-white die.
+        :param die: The die color
+        :param value: The value of the die
+        :param scorecard: The scorecard to add the dice to
+        :return: Whether or not the die was successfully chosen, as determined by the gamestate
+        """
+        if die == Color.WHITE:
+            return scorecard.add_die(self.compute_best_white_die_choice(value)[0], value)
+        else:
+            return scorecard.add_die(die, value)
 
 
 def dice_expansion(dice_colors: List[Color], card: ScoreCard) -> List[Tuple[Tuple[Color, int]]]:
@@ -80,7 +90,7 @@ def dice_expansion(dice_colors: List[Color], card: ScoreCard) -> List[Tuple[Tupl
         cur_list = []
         max_roll = 6 if color != Color.BLUE else 12
         for i in range(max_roll):
-            if card.can_add_die(color, i + 1):
+            if color == Color.WHITE or card.can_add_die(color, i + 1):
                 cur_list.append((color, i + 1))
         dice_list.append(cur_list)
     dice_list = list(itertools.product(*dice_list))

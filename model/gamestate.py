@@ -123,3 +123,10 @@ class GameState:
         :return: The total utility
         """
         return self.card.get_utility()
+
+    def get_score(self) -> int:
+        """
+        Get the score of the game state.
+        :return: The total score
+        """
+        return self.card.get_score()

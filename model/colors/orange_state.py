@@ -30,3 +30,6 @@ class OrangeState(ColorState):
             return sum(self.oranges) + new_die * self.multipliers[len(self.oranges)]
         else:
             return sum(self.oranges)
+
+    def get_score(self) -> int:
+        return sum(self.oranges)
