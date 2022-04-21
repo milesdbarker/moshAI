@@ -76,3 +76,10 @@ class ScoreCard:
         new_card = ScoreCard()
         new_card._color_mapping = color_map_copy
         return new_card
+
+    # Returns the scores of each color in a List[(Color, score)...]
+    def get_color_scores(self) -> List[Tuple[Color, int]]:
+        score_list: List[Tuple[Color, int]] = []
+        for color, color_state in self._color_mapping.items():
+            score_list.append((color, color_state.get_score()))
+        return score_list
