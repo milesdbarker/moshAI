@@ -31,9 +31,13 @@ class ManualAgent(Agent):
                         print("Please rechoose and use a valid color for the white die")
                         continue
                     else:
-                        return Color(color.lower())
+                        die = Color(color.lower())
+                        self.colors_chosen[die] += 1
+                        return die
                 elif self.game_state.choose_die(Color(color.lower())):
-                    return Color(color.lower())
+                    die = Color(color.lower())
+                    self.colors_chosen[die] += 1
+                    return die
                 else:
                     print("That color cannot be taken, please choose a different one")
             else:
