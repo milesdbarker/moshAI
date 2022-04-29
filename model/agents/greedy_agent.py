@@ -13,8 +13,19 @@ class GreedyAgent(Agent):
         sorted_dice: List[Tuple[Color, int]] = [(c, v) for c, v in sorted(dice.items(), key=lambda d: d[1])]
         sorted_dice.reverse()
 
+
+        # Want to make sure that no matter what, we will be able to roll at least one die for each roll in the turn'
+        # By default, that means the highest {3 - roll #} dice get left out. But because of the ways that ties work,
+        # Add back in the highest dice if there is a tie (i.e. a roll of 5, 5, 5, 3, 2 we can look at every die and
+        # still have at least two left for the last two rolls of the turn)
         index = 3 - roll
-        dice_priority = self.prioritize_dice(sorted_dice[index:])
+        offset = 0
+        for i in range(index, 0, -1):
+            if len(sorted_dice) < i and sorted_dice[i][1] == sorted_dice[index][1]:
+                offset += 1
+            else:
+                continue
+        dice_priority = self.prioritize_dice(sorted_dice[index - offset:])
 
         for die in dice_priority:
             if self.choose_die_wrapper(die[0], die[1]):

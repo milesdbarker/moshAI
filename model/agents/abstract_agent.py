@@ -25,11 +25,9 @@ class Agent(ABC):
 
     # Runs the agent, printing the final score
     def run_agent(self) -> bool:
-        print("Game starting")
         while not self.game_state.is_game_over():
             cur_dice = self.game_state.roll_dice()
             self.choose_die(cur_dice)
-        print(f"Game over, final score: {self.game_state.get_utility()}")
         return True
 
     # Runs the agent, printing an action each time one is taken
